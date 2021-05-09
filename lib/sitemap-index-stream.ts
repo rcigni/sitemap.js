@@ -2,7 +2,6 @@ import { Transform, TransformOptions, TransformCallback } from 'stream';
 import { IndexItem, SitemapItemLoose, ErrorLevel } from './types';
 import { SitemapStream, stylesheetInclude } from './sitemap-stream';
 import { element, otag, ctag } from './sitemap-xml';
-import { WriteStream } from 'fs';
 
 export enum IndexTagNames {
   sitemap = 'sitemap',
@@ -69,7 +68,7 @@ export class SitemapIndexStream extends Transform {
 
 type getSitemapStream = (
   i: number
-) => [IndexItem | string, SitemapStream, WriteStream];
+) => [IndexItem | string, SitemapStream, NodeJS.WritableStream];
 
 export interface SitemapAndIndexStreamOptions
   extends SitemapIndexStreamOptions {
@@ -82,7 +81,7 @@ export class SitemapAndIndexStream extends SitemapIndexStream {
   private i: number;
   private getSitemapStream: getSitemapStream;
   private currentSitemap: SitemapStream;
-  private currentSitemapPipeline?: WriteStream;
+  private currentSitemapPipeline?: NodeJS.WritableStream;
   private idxItem: IndexItem | string;
   private limit: number;
   constructor(opts: SitemapAndIndexStreamOptions) {
